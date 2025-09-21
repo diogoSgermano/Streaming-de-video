@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -15,6 +16,22 @@ public class VideoApplication {
     public static void main(String[] args) {
         SpringApplication.run(VideoApplication.class, args);
     }
+
+    // como foram realizadas as inserções (exemplo, pois apagamos as inserções reais)
+
+    // Avaliacao
+    //// Buscar um perfil e um vídeo existentes
+    //        Perfil perfil = perfilRepo.findById(1L).orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+    //        Video video = videoRepo.findById(1L).orElseThrow(() -> new RuntimeException("Vídeo não encontrado"));
+    //
+    //        // Criar uma nova avaliação
+    //        Avaliacao avaliacao = new Avaliacao();
+    //        avaliacao.setPerfil(perfil);
+    //        avaliacao.setVideo(video);
+    //        avaliacao.setNota(5);
+    //        avaliacao.setComentario("Vídeo excelente!");
+    //
+    //        avaliacaoRepo.save(avaliacao);
 
     @Bean
     CommandLineRunner run(
@@ -64,10 +81,17 @@ public class VideoApplication {
                     }
                     case 5 -> {
                         System.out.println("Usuário que mais assistiu vídeos:");
-                        visualizacaoRepo.findUsuariosMaisAtivos().forEach(usuario -> {
-                            System.out.println(usuario.getNome()+ " | "+ usuario.get);
+                        List<Object[]> resultados = visualizacaoRepo.findUsuariosComQuantidadeDeVideos();
+
+                        resultados.forEach(linha -> {
+                            String nome = (String) linha[0];
+                            Long quantidade = (Long) linha[1];
+                            System.out.println();
+                            System.out.println(nome + " assistiu " + quantidade + " vídeos");
                         });
                     }
+
+
                     case 0 -> {
                         System.out.println("Saindo do sistema...");
                         sc.close();

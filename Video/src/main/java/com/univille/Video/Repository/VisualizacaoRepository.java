@@ -17,8 +17,13 @@ public interface VisualizacaoRepository extends JpaRepository<Visualizacao,Long>
             "LIMIT 10", nativeQuery = true)
     List<Video> findTop10MaisAssistidos();
 
-    @Query("SELECT v.perfil.usuario FROM Visualizacao v GROUP BY v.perfil.usuario ORDER BY COUNT(v.idVisualizacao) DESC")
-    List<Usuario> findUsuariosMaisAtivos();
+    // Retorna o nome do usuário e a quantidade de vídeos que ele assistiu
+    @Query("SELECT v.perfil.usuario.nome, COUNT(v) " +
+            "FROM Visualizacao v " +
+            "GROUP BY v.perfil.usuario.nome " +
+            "ORDER BY COUNT(v) DESC")
+    List<Object[]> findUsuariosComQuantidadeDeVideos();
+
 
 
 
